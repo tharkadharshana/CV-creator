@@ -1,11 +1,43 @@
-<div align="center">
+# AI Job Application Assistant
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+Full-stack AI assistant for generating tailored resumes and cover letters using Google Gemini.
 
-  <h1>Built with AI Studio</h2>
+## Local Development (Client-Side Mode)
+This project is currently configured to run as a **Client-Side SPA** for demonstration purposes.
+1. `npm install`
+2. `npm start`
+3. Enter your Gemini API Key in `index.tsx` or `.env`.
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+## Backend Deployment (Google Cloud Run)
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+### Prerequisites
+1. Google Cloud Project with Billing enabled.
+2. `gcloud` CLI installed.
+3. MongoDB Atlas URI.
+4. Gemini API Key.
 
-</div>
+### Steps
+
+1. **Build Container**
+   ```bash
+   gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/job-assistant-api
+   ```
+
+2. **Deploy to Cloud Run**
+   ```bash
+   gcloud run deploy job-assistant-api \
+     --image gcr.io/YOUR_PROJECT_ID/job-assistant-api \
+     --platform managed \
+     --region us-central1 \
+     --allow-unauthenticated \
+     --set-env-vars="GEMINI_API_KEY=your_key,DB_URI=your_mongo_uri,JWT_SECRET=secure_random_string"
+   ```
+
+3. **Verify**
+   Visit the URL provided by the Cloud Run output.
+
+## Architecture
+- **Frontend**: React (served via Express static in prod, or Vite in dev).
+- **Backend**: Node.js, Express.
+- **AI**: Google Gemini Pro/Flash.
+- **Database**: MongoDB.
